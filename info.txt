@@ -1,3 +1,0 @@
-TODO - 
-    # remove correct pawn when eating to the right
-    # only let rooks go sideways when move.y is on the same line as the rook (do the same vertically)
