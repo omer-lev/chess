@@ -1,4 +1,5 @@
 import pygame
+from setup import *
 
 pygame.init()
 
@@ -13,261 +14,280 @@ clock = pygame.time.Clock()
 cursor_img = pygame.image.load('img/pointer.png')
 
 # pawns
-blackPawnImg = pygame.image.load('img/black_pawn.png')
 whitePawnImg = pygame.image.load('img/white_pawn.png')
+blackPawnImg = pygame.image.load('img/black_pawn.png')
+
+# bishops
+whiteBishopImg = pygame.image.load('img/white_bishop.png')
+blackBishopImg = pygame.image.load('img/black_bishop.png')
+
+# knights
+whiteKnightImg = pygame.image.load('img/white_knight.png')
+blackKnightImg = pygame.image.load('img/black_knight.png')
 
 # rooks
 whiteRookImg = pygame.image.load('img/white_rook.png')
 blackRookImg = pygame.image.load('img/black_rook.png')
 
-# pygame.mouse.set_visible(False)
-# cursor_img_rect = cursor_img.get_rect()
+# queens
+whiteQueenImg = pygame.image.load('img/white_queen.png')
+blackQueenImg = pygame.image.load('img/black_queen.png')
 
-class Pawn():
-    def __init__(self, x, y, width, height):
+# kings
+whiteKingImg = pygame.image.load('img/white_king.png')
+blackKingImg = pygame.image.load('img/black_king.png')
+
+
+class Pawn(object):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
-    
-    def move(self, side, capture=False):
-        if side == "white":
-            if capture:
-                if move[1] <= self.y - 25:
-                    if move[0] <= self.x - 25:
-                        self.x -= step
-                        self.y -= step
-                    
-                    elif move[0] >= self.x + 75:
-                        self.x += step
-                        self.y -= step
-            
-            else:
-                if move[1] >= self.y - 200 and move[1] < self.y - 25:
-                    if move[0] > self.x - 25 and move[0] < self.x + 75:
-                        if move[1] < self.y - 150 and self.y >= 600:
-                            self.y -= step*2
-                        
-                        else:
-                            self.y -= step
-                
 
-        if side == "black":
-            if capture:
-                if move[1] >= self.y + 75:
-                    if move[0] <= self.x - 25:
-                        self.x -= step
-                        self.y += step
-                    
-                    elif move[0] >= self.x + 75:
-                        self.x += step
-                        self.y += step
-
-            else:
-                if move[1] <= self.y + 250 and move[1] > self.y + 75:
-                    if move[0] > self.x - 25 and move[0] < self.x + 75:
-                        if move[1] > self.y + 150 and self.y <= 200:
-                            self.y += step*2
-                    
-                        else:
-                            self.y += step
-  
-
-    def draw(self, win, side):
-        if side == "white":
-            win.blit(whitePawnImg, (self.x - 10, self.y - 5))
+    def draw(self, win, color):
+        if color:
+            win.blit(whitePawnImg, (self.x, self.y))
         
-        if side == "black":
-            win.blit(blackPawnImg, (self.x - 10, self.y - 5))
-    
+        else:
+            win.blit(blackPawnImg, (self.x, self.y))
 
 
-class Rook():
-    def __init__(self, x, y, width, height):
+class Bishop(object):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
 
-    def move(self, side, capture=False):
-        if side == "white":
-            for i in range(7):
-                if round(move[0] / step) == i:
-                    self.x += step*i - self.x
+    def draw(self, win, color):
+        if color:
+            win.blit(whiteBishopImg, (self.x, self.y))
+        
+        else:
+            win.blit(blackBishopImg, (self.x, self.y))
 
-                if round(move[1] / step) == i:
-                    self.y -= self.y - step*i - 25
 
-        if side == "black":
-            for i in range(7):
-                if round(move[1] / step) == i:
-                    self.y += step*i - self.y
-                
+class Knight(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
-    def draw(self, win, side):
-        if side == "white":
-            win.blit(whiteRookImg, (self.x - 3, self.y - 5))
+    def draw(self, win, color):
+        if color:
+            win.blit(whiteKnightImg, (self.x, self.y))
+        
+        else:
+            win.blit(blackKnightImg, (self.x, self.y))
 
-        if side == "black":
-            win.blit(blackRookImg, (self.x + 3, self.y + 7))
+
+class Rook(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def draw(self, win, color):
+        if color:
+            win.blit(whiteRookImg, (self.x, self.y))
+        
+        else:
+            win.blit(blackRookImg, (self.x, self.y))
+
+
+class Queen(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def draw(self, win, color):
+        if color:
+            win.blit(whiteQueenImg, (self.x, self.y))
+        
+        else:
+            win.blit(blackQueenImg, (self.x, self.y))
+
+
+class King(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def draw(self, win, color):
+        if color:
+            win.blit(whiteKingImg, (self.x, self.y))
+        
+        else:
+            win.blit(blackKingImg, (self.x, self.y))
+
+
+def boardSetup():
+    height = 0
+
+    for i in range(len(squares)):
+        key = list(squares[i].keys())[0]
+        x = squares[i][key][0]
+        y = squares[i][key][1]
+
+        # board
+        if i % 8 == 0 and i != 0:
+            height += 1
+
+        if (i+height) % 2 == 0:
+            pygame.draw.rect(win, (179, 208, 255), (x, y, 100, 100))
+        
+        else:
+            pygame.draw.rect(win, (66, 135, 245), (x, y, 100, 100))
+
+        # pawns
+        if y == 100 and len(blackPawns) <= 7:
+            blackPawns.append(Pawn(x + 15, y + 15))
+        
+        elif y == 600 and len(whitePawns) <= 7:
+            whitePawns.append(Pawn(x + 15, y + 15))
+
+        
+        # white pieces
+        elif y == 700:
+            # bishops
+            if (x == 200 or x == 500) and len(whiteBishops) <= 1:
+                whiteBishops.append(Bishop(x + 4, y + 3))
+
+            # knights
+            if (x == 100 or x == 600) and len(whiteKnights) <= 1:
+                whiteKnights.append(Knight(x + 4, y + 3))
+
+            # rooks
+            if (x == 0 or x == 700) and len(whiteRooks) <= 1:
+                whiteRooks.append(Rook(x - 3, y + 15))
+
+            # queen
+            if x == 300 and len(whiteQueen) <= 0:
+                whiteQueen.append(Queen(x + 4, y + 6))
+
+            # king
+            if x == 400 and len(whiteKing) <= 0:
+                whiteKing.append(King(x + 4, y + 6))
+
+        
+         # black pieces
+        if y == 0:
+            # bishops
+            if (x == 200 or x == 500) and len(blackBishops) <= 1:
+                blackBishops.append(Bishop(x + 1, y + 3))
             
+            # knights
+            if (x == 100 or x == 600) and len(blackKnights) <= 1:
+                blackKnights.append(Knight(x + 4, y + 3))
+
+            # rooks
+            if (x == 0 or x == 700) and len(blackRooks) <= 1:
+                blackRooks.append(Rook(x + 3, y + 5))
+
+            # queen
+            if x == 300 and len(blackQueen) <= 0:
+                blackQueen.append(Queen(x + 5, y + 5))
+
+            # king
+            if x == 400 and len(blackKing) <= 0:
+                blackKing.append(King(x + 5, y + 5))
 
 
 
-def drawBoard():
-    for j in range(9):
-        for i in range(9):
-            if j % 2 == 0:
-                if i % 2 == 0:
-                    pygame.draw.rect(win, (255, 255, 255), (i*100, j*100, 100, 100))
-                
-                else:
-                    pygame.draw.rect(win, (118, 150, 86), (i*100, j*100, 100, 100))
-            
-            else:
-                if i % 2 == 0:
-                    pygame.draw.rect(win, (118, 150, 86), (i*100, j*100, 100, 100))
-                
-                else:
-                    pygame.draw.rect(win, (255, 255, 255), (i*100, j*100, 100, 100))
+def pieceSetup():
+    # pawns
+    for pawn in whitePawns:
+        pawn.draw(win, True)
+    
+    for pawn in blackPawns:
+        pawn.draw(win, False)
+
+    # bishops
+    for bishop in whiteBishops:
+        bishop.draw(win, True)
+    
+    for bishop in blackBishops:
+        bishop.draw(win, False)
+
+    # knights
+    for knight in whiteKnights:
+        knight.draw(win, True)
+    
+    for knight in blackKnights:
+        knight.draw(win, False)
+
+    # rooks
+    for rook in whiteRooks:
+        rook.draw(win, True)
+    
+    for rook in blackRooks:
+        rook.draw(win, False)
+
+    # queens
+    for queen in whiteQueen:
+        queen.draw(win, True)
+    
+    for queen in blackQueen:
+        queen.draw(win, False)
+
+    # kings
+    for king in whiteKing:
+        king.draw(win, True)
+    
+    for king in blackKing:
+        king.draw(win, False)
 
 
 def redraw():
-    drawBoard()
-            
-    for pawn in pawnsWhite:
-        pawn.draw(win, "white")
-    
-    for pawn in pawnsBlack:
-        pawn.draw(win, "black")
-
-    for rook in rooksWhite:
-        rook.draw(win, "white")
-    
-    for rook in rooksBlack:
-        rook.draw(win, "black")
-
-    
-    # cursor_img_rect.center = pygame.mouse.get_pos()
-    # win.blit(cursor_img, cursor_img_rect)
-    
+    boardSetup()
+    pieceSetup()
 
     pygame.display.update()
 
 
-pawnsWhite = []
-pawnsBlack = []
-
-rooksWhite = []
-rooksBlack = []
-
-
-# pawn init
-for i in range(9):
-    pawn = Pawn(i*100 + 25, win_height - 175, 50, 50)
-    pawnsWhite.append(pawn)
-
-
-for i in range(9):
-    pawn = Pawn(i*100 + 25, 125, 50, 50)
-    pawnsBlack.append(pawn)
-
-
-# rook init
-rook = Rook(0, win_height - 75, 50, 50)
-rooksWhite.append(rook)
-
-rook = Rook(win_width - 100, win_height - 75, 50, 50)
-rooksWhite.append(rook)
-
-rook = Rook(0, 0, 50, 50)
-rooksBlack.append(rook)
-
-rook = Rook(win_width - 100, 0, 50, 50)
-rooksBlack.append(rook)
-
-
-
-selection = ()
-move = ()
-moveCount = 0
-step = 100
 run = True
-
 while run:
     clock.tick(60)
+    redraw()
 
     keys = pygame.key.get_pressed()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        
+    
+    
+    # testing
+    for pawn in whitePawns:
+        pawn.y -= 1
 
-        if event.type == pygame.MOUSEBUTTONUP:
-            if moveCount == 0:
-                selection = pygame.mouse.get_pos()
-                moveCount += 1
-            
-            elif moveCount == 1:
-                move = pygame.mouse.get_pos()
-                
-                # PAWN MOVEMENT
-                #---------------
-                # white movement
-                for pawn in pawnsWhite:
-                    if pawn.y - 25 <= selection[1] and pawn.y + 75 >= selection[1]:
-                        if pawn.x - 25 <= selection[0] and pawn.x + 75 >= selection[0]:
-                            pawn.move("white")
-                
-                # black movement
-                for pawn in pawnsBlack:
-                    if pawn.x - 25 <= selection[0] and pawn.x + 75 >= selection[0]:
-                        if pawn.y - 25 <= selection[1] and pawn.y + 75 >= selection[1]:
-                            pawn.move("black")                
+    for pawn in blackPawns:
+        pawn.y += 1
 
-                # white captures
-                for pawn in pawnsWhite:
-                    for bPawn in pawnsBlack:
-                        if pawn.y - 100 == bPawn.y and (pawn.x - 100 == bPawn.x or pawn.x + 100 == bPawn.x):
-                            if pawn.y - 25 <= selection[1] and pawn.y + 75 >= selection[1]:
-                                if pawn.x - 25 <= selection[0] and pawn.x + 75 >= selection[0]:
-                                    pawn.move("white", True)
-                                    pawnsBlack.pop(pawnsBlack.index(bPawn))
-                
-                # black captures
-                for pawn in pawnsBlack:
-                    for wPawn in pawnsWhite:
-                        if pawn.y + 100 == wPawn.y and (pawn.x - 100 == wPawn.x or pawn.x + 100 == wPawn.x):
-                            if pawn.y + 75 >= selection[1] and pawn.y - 25 <= selection[1]:
-                                if pawn.x - 25 <= selection[0] and pawn.x + 75 >= selection[0]:
-                                    pawn.move("black", True)
-                                    pawnsWhite.pop(pawnsWhite.index(wPawn))
-                
+    for pawn in whiteRooks:
+        pawn.y -= 1
 
-                # ROOK MOVEMENT
-                # --------------
-                # white movement
-                for rook in rooksWhite:
-                    if rook.y - 25 <= selection[1] and rook.y + 75 >= selection[1]:
-                        if rook.x - 25 <= selection[0] and rook.x + 75 >= selection[0]:
-                            rook.move("white")
+    for pawn in blackRooks:
+        pawn.y += 1
 
-                # black movement
-                for rook in rooksBlack:
-                    if rook.y - 25 <= selection[1] and rook.y + 75 >= selection[1]:
-                        if rook.x - 25 <= selection[0] and rook.x + 75 >= selection[0]:
-                            rook.move("black")
-                
-                # white captures
-                for rook in rooksWhite:
-                    for pawn in pawnsBlack:
-                        if rook.y == pawn.y and rook.x == pawn.x - 25:
-                            pawnsBlack.pop(pawnsBlack.index(pawn))
+    for pawn in whiteBishops:
+        pawn.y -= 1
 
-                moveCount = 0
+    for pawn in blackBishops:
+        pawn.y += 1
 
-    redraw()
+    for pawn in whiteKnights:
+        pawn.y -= 1
 
+    for pawn in blackKnights:
+        pawn.y += 1
+
+    for pawn in whiteQueen:
+        pawn.y -= 1
+
+    for pawn in blackQueen:
+        pawn.y += 1
+
+    for pawn in whiteKing:
+        pawn.y -= 1
+
+    for pawn in blackKing:
+        pawn.y += 1
+    
 
 pygame.quit()
