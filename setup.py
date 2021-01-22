@@ -14,6 +14,26 @@ blackRooks = []
 blackQueen = []
 blackKing = []
 
+
+whitePieces = [
+    whitePawns,
+    whiteBishops,
+    whiteKnights,
+    whiteRooks,
+    whiteQueen,
+    whiteKing
+]
+
+blackPieces = [
+    blackPawns,
+    blackBishops,
+    blackKnights,
+    blackRooks,
+    blackQueen,
+    blackKing
+]
+
+
 squares = [
     {'a1': (0, 0)}, {'a2': (100, 0)}, {'a3': (200, 0)}, {'a4': (300, 0)}, {'a5': (400, 0)}, {'a6': (500, 0)}, {'a7': (600, 0)}, {'a8': (700, 0)}, 
     {'b1': (0, 100)}, {'b2': (100, 100)}, {'b3': (200, 100)}, {'b4': (300, 100)}, {'b5': (400, 100)}, {'b6': (500, 100)}, {'b7': (600, 100)}, {'b8': (700, 100)}, 
