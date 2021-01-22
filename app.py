@@ -8,6 +8,7 @@ win_height = 900
 
 win = pygame.display.set_mode((win_width, win_height))
 title = pygame.display.set_caption("Chess")
+font = pygame.font.SysFont('comic sans', 60)
 
 clock = pygame.time.Clock()
 
@@ -188,23 +189,11 @@ class King(object):
             win.blit(blackKingImg, (self.x, self.y))
 
 
-def boardSetup():
-    height = 0
-
+def pieceSetup():
     for i in range(len(squares)):
         key = list(squares[i].keys())[0]
         x = squares[i][key][0]
         y = squares[i][key][1]
-
-        # board
-        if i % 8 == 0 and i != 0:
-            height += 1
-
-        if (i+height) % 2 == 0:
-            pygame.draw.rect(win, (179, 208, 255), (x, y, 100, 100))
-        
-        else:
-            pygame.draw.rect(win, (66, 135, 245), (x, y, 100, 100))
 
         # pawns
         if y == 600 and len(whitePawns) <= 7:
@@ -261,7 +250,7 @@ def boardSetup():
 
 
 
-def pieceSetup():
+def drawPieces():
     # pawns
     for pawn in whitePawns:
         pawn.draw(win, True)
@@ -305,12 +294,31 @@ def pieceSetup():
         king.draw(win, False)
 
 
-
 def redraw():
+    height = 0
+    text = font.render("DELETE", False, (255, 0, 0))
+
     pygame.draw.rect(win, (255, 255, 255), (0, 0, win_width, win_height))
     pygame.draw.rect(win, (255, 0, 0), (0, 800, win_width, 100), 4)
-    boardSetup()
-    pieceSetup()
+
+    win.blit(text, (320, 830))
+
+    for i in range(len(squares)):
+        key = list(squares[i].keys())[0]
+        x = squares[i][key][0]
+        y = squares[i][key][1]
+
+        # board
+        if i % 8 == 0 and i != 0:
+            height += 1
+
+        if (i+height) % 2 == 0:
+            pygame.draw.rect(win, (179, 208, 255), (x, y, 100, 100))
+        
+        else:
+            pygame.draw.rect(win, (66, 135, 245), (x, y, 100, 100))
+
+    drawPieces()
 
     pygame.display.update()
 
@@ -318,6 +326,7 @@ def redraw():
 whiteTurn = True
 move = False
 run = True
+pieceSetup()
 
 while run:
     clock.tick(60)
@@ -341,24 +350,26 @@ while run:
                 # white pieces
                 for arr in whitePieces:
                     for piece in arr:
-                        if piece.y <= selection[1] and piece.y + 100 >= selection[1] and whiteTurn:
+                        if piece.y <= selection[1] and piece.y + 100 >= selection[1]:
                             if piece.x <= selection[0] and piece.x + 100 >= selection[0]:
                                 if movePos[1] > 800:
                                     arr.pop(arr.index(piece))
                                 else:
-                                    piece.move(movePos)
-                                    whiteTurn = False
+                                    if whiteTurn:
+                                        piece.move(movePos)
+                                        whiteTurn = False
 
                 # black pieces
                 for arr in blackPieces:
                     for piece in arr:
-                        if piece.y <= selection[1] and piece.y + 100 >= selection[1] and not(whiteTurn):
+                        if piece.y <= selection[1] and piece.y + 100 >= selection[1]:
                             if piece.x <= selection[0] and piece.x + 100 >= selection[0]:
                                 if movePos[1] > 800:
                                     arr.pop(arr.index(piece))
                                 else:
-                                    piece.move(movePos)
-                                    whiteTurn = True
+                                    if not(whiteTurn):
+                                        piece.move(movePos)
+                                        whiteTurn = True
                 
                 move = False
     
@@ -375,8 +386,6 @@ while run:
                         
                         elif not(whiteTurn):
                             bArr.pop(bArr.index(bPiece))
-
-                        print("capture")
     
 
 pygame.quit()
